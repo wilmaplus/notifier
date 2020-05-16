@@ -5,4 +5,4 @@ Django-powered notifier backend listens when the app will request a notification
 
 Endpoints:
 
-`/api/v1/push` - Check for new items to push
+*POST* `/api/v1/push` - Check for new items to push
