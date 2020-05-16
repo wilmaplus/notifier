@@ -1,4 +1,5 @@
 # Notifier configuration
+
 API_KEY_CHECK_ENABLED = False
 API_KEYS = []
 ADMIN_PANEL = False

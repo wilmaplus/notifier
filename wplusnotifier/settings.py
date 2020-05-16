@@ -20,6 +20,8 @@ from .notifier import *
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+STORAGE_DIR = os.path.join(BASE_DIR, 'wplusnotifier_storage'),
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
@@ -42,6 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'wplusnotifier_rest'
 ]
 
 MIDDLEWARE = [
