@@ -10,5 +10,6 @@ NOTIFIER_ROUTINES = [
 
 ]
 
-# TODO set your FCM key
+# TODO set your FCM key(s)
 FCM_SERVER_KEY = ""
+FCM_LEGACY_SERVER_KEY = ""
