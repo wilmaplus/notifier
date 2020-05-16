@@ -1,6 +1,6 @@
 # Notifier configuration
-APIKEY_ENABLED = False
-APIKEYS = []
+API_KEY_CHECK_ENABLED = False
+API_KEYS = []
 ADMIN_PANEL = False
 
 VALIDATE_CLIENT_KEY = False
