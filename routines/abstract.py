@@ -9,4 +9,4 @@ class AbstractRoutine:
             self.filename = filename
 
     def check(self, wilmaserver, wilmasession, enc_pass):
-        pass
+        raise Exception("check method should be overridden! If you already did it, remove the super method")
