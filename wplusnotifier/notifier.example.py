@@ -1,3 +1,5 @@
+#  Copyright (c) 2020 wilmaplus-notifier, developed by Developer From Jokela, for Wilma Plus mobile app
+
 # Notifier configuration
 
 API_KEY_CHECK_ENABLED = False

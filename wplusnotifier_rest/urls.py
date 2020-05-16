@@ -1,5 +1,5 @@
 
-#  Copyright (c) 2020 openKirkes, developed by Developer From Jokela
+#  Copyright (c) 2020 wilmaplus-notifier, developed by Developer From Jokela, for Wilma Plus mobile app
 
 from django.conf.urls import url, include
 from rest_framework import routers
