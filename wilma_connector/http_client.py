@@ -2,6 +2,8 @@
 import requests
 from urllib.parse import urlparse
 from .classes import *
+from django.conf import settings
+
 
 
 class WilmaHttpClient:
@@ -56,22 +58,24 @@ class WilmaHttpClient:
 class FCMHttpClient:
 
     def __init__(self):
-        self.baseUrl = wilma_url
+        baseURL = settings.FCM_URL
+        if baseURL[len(baseURL) - 1] is not "/":
+            baseURL = baseURL + "/"
+        self.baseUrl = baseURL
         self.sessionHttp = requests.Session()
-
-    def getBaseURLDomainName(self):
-        return '{uri.netloc}'.format(uri=urlparse(self.baseUrl))
 
     def get_request(self, url):
         try:
-            r = self.sessionHttp.get(self.baseUrl + url)
+            headers = {'Authorization': 'key='+settings.FCM_SERVER_KEY}
+            r = self.sessionHttp.get(self.baseUrl + url, headers=headers)
             return RequestResult(False, None, r)
         except Exception as e:
             return ErrorResult(e)
 
     def post_request(self, url, data, headers=None, followRedirects=True):
         try:
-            r = self.sessionHttp.post(self.baseUrl + url, data=data, allow_redirects=followRedirects)
+            headers = {'Authorization': 'key='+settings.FCM_SERVER_KEY}
+            r = self.sessionHttp.post(self.baseUrl + url, data=data, allow_redirects=followRedirects, headers=headers)
             return RequestResult(False, None, r)
         except Exception as e:
             return ErrorResult(e)
