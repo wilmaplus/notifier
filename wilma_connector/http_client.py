@@ -72,7 +72,7 @@ class FCMHttpClient:
         except Exception as e:
             return ErrorResult(e)
 
-    def post_request(self, url, data, headers=None, followRedirects=True):
+    def post_request(self, url, data, followRedirects=True):
         try:
             headers = {'Authorization': 'key='+settings.FCM_SERVER_KEY}
             r = self.sessionHttp.post(self.baseUrl + url, data=data, allow_redirects=followRedirects, headers=headers)
