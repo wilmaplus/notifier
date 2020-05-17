@@ -46,6 +46,26 @@ class SessionValidateResult(RequestResult):
         return self.validation
 
 
+class PushSendRequest(RequestResult):
+
+    def __init__(self, success):
+        super(PushSendRequest, self).__init__(False, None, None)
+        self.success = success
+
+    def is_sent(self):
+        return self.success
+
+
+class PushDetailsRequest(RequestResult):
+
+    def __init__(self, details):
+        super(PushDetailsRequest, self).__init__(False, None, None)
+        self.details = details
+
+    def get_details(self):
+        return self.details
+
+
 class ExamsResult(RequestResult):
 
     def __init__(self, exams):

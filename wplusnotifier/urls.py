@@ -13,6 +13,6 @@ patterns = [
     url('api/v1/', include('wplusnotifier_rest.urls'))
 ]
 
-if settings.ADMIN_PANEL:
+if settings.DJANGO_ADMIN_PANEL:
     patterns.append(url(r'^admin/', admin.site.urls))
 urlpatterns = patterns
