@@ -4,10 +4,10 @@ from .abstract import AbstractRoutine
 
 
 class Exams(AbstractRoutine):
-    def __init__(self):
-        super().__init__("exams")
+    def __init__(self, push_utils):
+        super().__init__("exams", push_utils)
 
-    def check(self, wilmaserver, wilmasession, enc_pass):
+    def check(self, wilmaserver, wilmasession, enc_pass, push_id):
         pass
 
 
