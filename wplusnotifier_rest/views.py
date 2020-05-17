@@ -7,7 +7,9 @@ from __future__ import unicode_literals
 from rest_framework.decorators import permission_classes, api_view
 from rest_framework.response import *
 from wilma_connector.wilma_client import WilmaClient
+from wilma_connector.iid_client import IIDClient
 from wilma_connector.classes import ErrorResult
+from django.conf import settings
 
 
 @api_view(['POST'])
@@ -15,15 +17,27 @@ from wilma_connector.classes import ErrorResult
 def push(request):
     session_cookies = request.data.get('session', None)
     server_url = request.data.get('server_url', None)
+    iid_key = request.data.get('iid_key', None)
     if server_url is None:
         return generateErrorResponse(ErrorResult('server_url is missing!'))
     if session_cookies is None:
         return generateErrorResponse(ErrorResult('session is missing!'))
+    if iid_key is None:
+        return generateErrorResponse(ErrorResult('iid_key is missing!'))
     wilma_client = WilmaClient(server_url, session_cookies)
     session_check = wilma_client.checkSession()
     if session_check.is_error():
         return generateErrorResponse(session_check)
     else:
+        iid_client = IIDClient()
+        iid_result = iid_client.push_key_details(iid_key)
+        if iid_result.is_error():
+            return generateErrorResponse(iid_result)
+        else:
+            details = iid_result.get_details()
+            if settings.VALIDATE_CLIENT_KEY:
+                if not details.get('application', None) in settings.VALID_CLIENT_PACKAGES:
+                    return generateErrorResponse(ErrorResult('iid_key is not trusted for this notifier!'))
         return generateResponse({})
 
 

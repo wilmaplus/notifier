@@ -26,8 +26,14 @@ class IIDClient:
         requestResult = self.http_client.get_request("iid/info/"+push_key)
         if requestResult.is_error():
             return requestResult
-        error_check = checkForIIDError(requestResult.get_response())
-        if error_check is not None:
-            return error_check
-        jsonResponse = json.loads(requestResult.get_response().text)
-        return PushDetailsRequest(jsonResponse)
+        try:
+            error_check = checkForIIDError(requestResult.get_response())
+            if error_check is not None:
+                return error_check
+            jsonResponse = json.loads(requestResult.get_response().text)
+            return PushDetailsRequest(jsonResponse)
+        except json.JSONDecodeError:
+            if requestResult.get_response().status_code == 404:
+                return ErrorResult('Invalid iid_key!')
+            else:
+                return ErrorResult("Couldn't parse JSON response")
