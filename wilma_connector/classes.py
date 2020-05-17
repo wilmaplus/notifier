@@ -45,6 +45,7 @@ class SessionValidateResult(RequestResult):
     def is_valid_session(self):
         return self.validation
 
+
 class ExamsResult(RequestResult):
 
     def __init__(self, exams):
@@ -53,3 +54,13 @@ class ExamsResult(RequestResult):
 
     def get_exams(self):
         return self.exams
+
+
+class ObservationsResult(RequestResult):
+
+    def __init__(self, observations):
+        super(ObservationsResult, self).__init__(False, None, None)
+        self.observations = observations
+
+    def get_observations(self):
+        return self.observations

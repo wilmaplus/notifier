@@ -2,7 +2,7 @@
 import json
 
 from .http_client import WilmaHttpClient
-from .classes import ErrorResult, SessionValidateResult, ExamsResult
+from .classes import *
 
 
 def checkForWilmaError(response):
@@ -31,7 +31,7 @@ class WilmaClient:
         error_check = checkForWilmaError(requestResult.get_response())
         if error_check is not None:
             return error_check
-        return SessionValidateResult
+        return SessionValidateResult(True)
 
     def getExams(self, check_session=False):
         if check_session:
@@ -49,3 +49,20 @@ class WilmaClient:
         jsonResponse = json.loads(requestResult.get_response().text)
         exams = jsonResponse.get('Exams', [])
         return ExamsResult(exams)
+
+    def getObservations(self, check_session=False):
+        if check_session:
+            session_result = self.checkSession()
+            if session_result.is_error():
+                return session_result
+            if not session_result.is_valid_session():
+                return ErrorResult(Exception('Invalid session!'))
+        requestResult = self.http_client.authenticated_get_request("attendance/index_json")
+        if requestResult.is_error():
+            return requestResult
+        error_check = checkForWilmaError(requestResult.get_response())
+        if error_check is not None:
+            return error_check
+        jsonResponse = json.loads(requestResult.get_response().text)
+        obs = jsonResponse.get('Observations', [])
+        return ObservationsResult(obs)
