@@ -20,13 +20,11 @@ def push(request):
     if session_cookies is None:
         return generateErrorResponse(ErrorResult('session is missing!'))
     wilma_client = WilmaClient(server_url, session_cookies)
-    obs = wilma_client.getObservations(True)
-    if obs.is_error():
-        return generateErrorResponse(obs)
+    session_check = wilma_client.checkSession()
+    if session_check.is_error():
+        return generateErrorResponse(session_check)
     else:
-        return generateResponse({
-            'observations': obs.get_observations()
-        })
+        return generateResponse({})
 
 
 def generateErrorResponse(error_result):

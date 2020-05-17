@@ -64,3 +64,13 @@ class ObservationsResult(RequestResult):
 
     def get_observations(self):
         return self.observations
+
+
+class NewsResult(RequestResult):
+
+    def __init__(self, news):
+        super(NewsResult, self).__init__(False, None, None)
+        self.news = news
+
+    def get_news(self):
+        return self.news
