@@ -2,6 +2,7 @@
 
 from .abstract import AbstractRoutine, convertToJSON, convertFromJSON
 from wilma_connector.wilma_client import WilmaClient
+from wilma_connector.fcm_client import FCMClient
 
 
 class Exams(AbstractRoutine):
@@ -10,6 +11,7 @@ class Exams(AbstractRoutine):
 
     def check(self, wilmaserver, wilmasession, enc_pass, push_id):
         wilma_client = WilmaClient(wilmaserver, wilmasession)
+        fcm_client = FCMClient()
         exams = wilma_client.getExams()
         if not exams.is_error():
             return exams.get_exception()
@@ -23,12 +25,9 @@ class Exams(AbstractRoutine):
                         found = True
                         break
                 if not found:
-                    # TODO send push
-                    ...
+                    push_content = {'type': 'notification', 'data': self.name, 'payload': l_exam}
+                    fcm_client.sendPush(push_id, push_content)
+                    print(convertToJSON(push_content))
 
         self.save_file(convertToJSON(exams), enc_pass, push_id)
         return None
-
-
-
-
