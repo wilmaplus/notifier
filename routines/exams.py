@@ -16,6 +16,7 @@ class Exams(AbstractRoutine):
         if exams.is_error():
             return exams.get_exception()
         offline_data_pt = self.get_file(push_id, push_id, user_id)
+        user_object = {'id': user_id.split("_")[0], 'type': user_id.split("_")[1], 'server': wilmaserver}
         if offline_data_pt is not None:
             offline_data = convertFromJSON(offline_data_pt)
             for l_exam in exams.get_exams():
@@ -25,7 +26,7 @@ class Exams(AbstractRoutine):
                         found = True
                         break
                 if not found:
-                    push_content = {'type': 'notification', 'data': self.name, 'payload': l_exam}
+                    push_content = {'type': 'notification', 'data': self.name, 'payload': l_exam, 'user': user_object}
                     fcm_client.sendPush(push_id, push_content)
         self.save_file(convertToJSON(exams.get_exams()), push_id, push_id, user_id)
         return None

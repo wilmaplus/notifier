@@ -16,6 +16,7 @@ class News(AbstractRoutine):
         if news.is_error():
             return news.get_exception()
         offline_data_pt = self.get_file(push_id, push_id, user_id)
+        user_object = {'id': user_id.split("_")[0], 'type': user_id.split("_")[1], 'server': wilmaserver}
         if offline_data_pt is not None:
             offline_data = convertFromJSON(offline_data_pt)
             for l_obs in news.get_news():
@@ -25,7 +26,7 @@ class News(AbstractRoutine):
                         found = True
                         break
                 if not found:
-                    push_content = {'type': 'notification', 'data': self.name, 'payload': l_obs}
+                    push_content = {'type': 'notification', 'data': self.name, 'payload': l_obs, 'user': user_object}
                     fcm_client.sendPush(push_id, push_content)
         self.save_file(convertToJSON(news.get_news()), push_id, push_id, user_id)
         return None
