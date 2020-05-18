@@ -18,7 +18,7 @@ class Exams(AbstractRoutine):
         offline_data_pt = self.get_file(push_id, push_id)
         if offline_data_pt is not None:
             offline_data = convertFromJSON(offline_data_pt)
-            for l_exam in exams:
+            for l_exam in exams.get_exams():
                 found = False
                 for o_exam in offline_data:
                     if o_exam['ExamId'] == l_exam['ExamId']:

@@ -25,5 +25,4 @@ class AbstractRoutine:
         return get_saved_data(enc_pass, self.filename, push_id)
 
     def save_file(self, content, enc_pass, push_id):
-        print("savin requestd")
         return save_data(content, enc_pass, self.filename, push_id)
