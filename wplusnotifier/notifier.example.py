@@ -17,3 +17,4 @@ NOTIFIER_ROUTINES = [
 FCM_SERVER_KEY = ""
 IID_SERVER_KEY = ""
 FCM_URL = "https://fcm.googleapis.com"
+IID_URL = "https://iid.googleapis.com"

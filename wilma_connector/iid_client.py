@@ -1,8 +1,10 @@
 #  Copyright (c) 2020 wilmaplus-notifier, developed by Developer From Jokela, for Wilma Plus mobile app
 import json
+import urllib
 
 from .http_client import IIDHttpClient
 from .classes import *
+
 
 
 def checkForIIDError(response):
@@ -10,7 +12,7 @@ def checkForIIDError(response):
         jsonResponse = json.loads(response.text)
         errorBody = jsonResponse.get('error', None)
         if errorBody is not None:
-            return ErrorResult(Exception(errorBody['error']))
+            return ErrorResult(Exception(errorBody))
         else:
             return ErrorResult(Exception("Unable to parse error code: " + str(response.status_code)))
     else:

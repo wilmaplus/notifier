@@ -93,7 +93,7 @@ class FCMHttpClient:
 class IIDHttpClient:
 
     def __init__(self):
-        baseURL = settings.FCM_URL
+        baseURL = settings.IID_URL
         if baseURL[len(baseURL) - 1] is not "/":
             baseURL = baseURL + "/"
         self.baseUrl = baseURL
