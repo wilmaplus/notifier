@@ -8,7 +8,7 @@ from rest_framework.decorators import permission_classes, api_view
 from rest_framework.response import *
 
 from routine_runner.runner import *
-from wilma_connector.classes import ErrorResult
+from wilma_connector.classes import ErrorResult, RequestResult
 from wilma_connector.iid_client import IIDClient
 from wilma_connector.wilma_client import WilmaClient
 
@@ -18,9 +18,29 @@ def custom_exception_handler(exc, context):
     return generateErrorResponse(ErrorResult(exc))
 
 
+def checkApiKey(request):
+    if settings.API_KEY_CHECK_ENABLED:
+        post_key = request.data.get('apikey', None)
+        get_key = request.GET.get('apikey', None)
+        apikey = None
+        if post_key is not None:
+            apikey = post_key
+        elif get_key is not None:
+            apikey = get_key
+        if apikey is None:
+            return ErrorResult('apikey is missing!')
+        else:
+            if apikey not in settings.API_KEYS:
+                return ErrorResult('Invalid apikey!')
+    return RequestResult(False)
+
+
 @api_view(['POST'])
 @permission_classes([])
 def push(request):
+    apikey_result = checkApiKey(request)
+    if apikey_result.is_error():
+        return generateErrorResponse(apikey_result)
     session_cookies = request.data.get('session', None)
     server_url = request.data.get('server_url', None)
     iid_key = request.data.get('iid_key', None)
