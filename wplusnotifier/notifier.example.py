@@ -10,7 +10,7 @@ VALIDATE_CLIENT_KEY = False
 VALID_CLIENT_PACKAGE = "com.example"
 
 NOTIFIER_ROUTINES = [
-
+    {'package': 'routines.exams', 'class': 'Exams'}
 ]
 
 # TODO set your FCM key(s)

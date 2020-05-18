@@ -10,6 +10,7 @@ from wilma_connector.wilma_client import WilmaClient
 from wilma_connector.iid_client import IIDClient
 from wilma_connector.classes import ErrorResult
 from django.conf import settings
+from routine_runner.runner import *
 
 
 @api_view(['POST'])
@@ -38,6 +39,7 @@ def push(request):
             if settings.VALIDATE_CLIENT_KEY:
                 if not details.get('application', None) in settings.VALID_CLIENT_PACKAGES:
                     return generateErrorResponse(ErrorResult('iid_key is not trusted for this notifier!'))
+        runRoutines(server_url, session_cookies, iid_key, iid_key)
         return generateResponse({})
 
 

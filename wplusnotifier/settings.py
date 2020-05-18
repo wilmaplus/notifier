@@ -22,7 +22,7 @@ from .notifier import *
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-STORAGE_DIR = os.path.join(BASE_DIR, 'wplusnotifier_storage'),
+STORAGE_DIR = os.path.join(BASE_DIR, 'wplusnotifier_data')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/

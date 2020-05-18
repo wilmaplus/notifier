@@ -6,16 +6,16 @@ from wilma_connector.fcm_client import FCMClient
 
 
 class Exams(AbstractRoutine):
-    def __init__(self, push_utils):
-        super().__init__("exams", push_utils)
+    def __init__(self):
+        super().__init__("exams")
 
-    def check(self, wilmaserver, wilmasession, enc_pass, push_id):
+    def check(self, wilmaserver, wilmasession, push_id):
         wilma_client = WilmaClient(wilmaserver, wilmasession)
         fcm_client = FCMClient()
         exams = wilma_client.getExams()
-        if not exams.is_error():
+        if exams.is_error():
             return exams.get_exception()
-        offline_data_pt = self.get_file(enc_pass, push_id)
+        offline_data_pt = self.get_file(push_id, push_id)
         if offline_data_pt is not None:
             offline_data = convertFromJSON(offline_data_pt)
             for l_exam in exams:
@@ -28,6 +28,5 @@ class Exams(AbstractRoutine):
                     push_content = {'type': 'notification', 'data': self.name, 'payload': l_exam}
                     fcm_client.sendPush(push_id, push_content)
                     print(convertToJSON(push_content))
-
-        self.save_file(convertToJSON(exams), enc_pass, push_id)
+        self.save_file(convertToJSON(exams.get_exams()), push_id, push_id)
         return None

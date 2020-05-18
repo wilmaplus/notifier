@@ -10,8 +10,8 @@ import os
 
 
 def get_saved_data(enc_key, filename, random_token):
-    token_hash = hashlib.sha256(random_token)
-    filename = filename + "_" + token_hash + ".wplus_storage"
+    token_hash = hashlib.sha512(random_token.encode('UTF-8'))
+    filename = filename + "_" + token_hash.digest().hex() + ".wplus_storage"
     savePathCheck(settings.STORAGE_DIR)
     file_path = Path(os.path.join(settings.STORAGE_DIR, filename))
     if file_path.is_file():
@@ -23,10 +23,11 @@ def get_saved_data(enc_key, filename, random_token):
 
 
 def save_data(content, enc_key, filename, random_token):
-    token_hash = hashlib.sha256(random_token)
-    filename = filename + "_" + token_hash + ".wplus_storage"
+    token_hash = hashlib.sha512(random_token.encode('UTF-8'))
+    filename = filename + "_" + token_hash.digest().hex() + ".wplus_storage"
     savePathCheck(settings.STORAGE_DIR)
     file_path = Path(os.path.join(settings.STORAGE_DIR, filename))
+    print(file_path)
     if file_path.is_file():
         file_path.unlink()
     encrypted_content = AESCipher(content, enc_key).encrypt()
