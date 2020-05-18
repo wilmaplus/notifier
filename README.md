@@ -3,6 +3,7 @@ Django-powered notifier backend listens when the app will request a notification
 
 # REST API
 
+(Check the Wiki for more detailed guide)
 Endpoints:
 
 *POST* `/api/v1/push` - Check for new items to push
