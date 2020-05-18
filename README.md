@@ -3,7 +3,7 @@ Django-powered notifier backend listens when the app will request a notification
 
 # REST API
 
-(Check the Wiki for a detailed guide)
+(Check the [Wiki](https://github.com/developerfromjokela/wilmaplus-notifier/wiki) for a detailed guide)
 Endpoints:
 
 *POST* `/api/v1/push` - Check for new items to push
