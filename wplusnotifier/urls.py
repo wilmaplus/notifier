@@ -14,9 +14,9 @@ from wplusnotifier_rest.views import error_404, api_guide
 patterns = [
     url(r'^api/', include('wplusnotifier_rest.urls')),
     url(r'^$', api_guide),
-    url(r'^', error_404),
 ]
 
 if settings.DJANGO_ADMIN_PANEL:
     patterns.append(url(r'^admin/', admin.site.urls))
+patterns.append(url(r'^', error_404))
 urlpatterns = patterns
