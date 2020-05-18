@@ -6,11 +6,11 @@ from __future__ import unicode_literals
 
 from rest_framework.decorators import permission_classes, api_view
 from rest_framework.response import *
-from wilma_connector.wilma_client import WilmaClient
-from wilma_connector.iid_client import IIDClient
-from wilma_connector.classes import ErrorResult
-from django.conf import settings
+
 from routine_runner.runner import *
+from wilma_connector.classes import ErrorResult
+from wilma_connector.iid_client import IIDClient
+from wilma_connector.wilma_client import WilmaClient
 
 
 @api_view(['POST'])

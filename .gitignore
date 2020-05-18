@@ -2,3 +2,4 @@ venv
 wplusnotifier/notifier.py
 .idea
 db.sqlite3
+wplusnotifier_data
