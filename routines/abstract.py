@@ -18,11 +18,11 @@ class AbstractRoutine:
         if filename is not None:
             self.filename = filename
 
-    def check(self, wilmaserver, wilmasession, push_id):
+    def check(self, wilmaserver, wilmasession, push_id, user_id):
         raise Exception("check method should be overridden! If you already did it, remove the super method")
 
-    def get_file(self, enc_pass, push_id):
-        return get_saved_data(enc_pass, self.filename, push_id)
+    def get_file(self, enc_pass, push_id, user_id):
+        return get_saved_data(enc_pass, self.filename, push_id, user_id)
 
-    def save_file(self, content, enc_pass, push_id):
-        return save_data(content, enc_pass, self.filename, push_id)
+    def save_file(self, content, enc_pass, push_id, user_id):
+        return save_data(content, enc_pass, self.filename, push_id, user_id)

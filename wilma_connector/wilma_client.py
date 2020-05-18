@@ -31,7 +31,13 @@ class WilmaClient:
         error_check = checkForWilmaError(requestResult.get_response())
         if error_check is not None:
             return error_check
-        return SessionValidateResult(True)
+        jsonResponse = json.loads(requestResult.get_response().text)
+        user_id = jsonResponse.get('PrimusId', -1)
+        user_type = jsonResponse.get('Type', -1)
+        if user_id is not -1 and user_type is not -1:
+            return SessionValidateResult(True, user_id, user_type)
+        else:
+            return ErrorResult('Unable to get user information. Are you sure that you included Slug ID?')
 
     def getExams(self, check_session=False):
         if check_session:

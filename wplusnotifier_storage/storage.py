@@ -9,9 +9,9 @@ from django.conf import settings
 import os
 
 
-def get_saved_data(enc_key, filename, random_token):
+def get_saved_data(enc_key, filename, random_token, user_id):
     token_hash = hashlib.sha512(random_token.encode('UTF-8'))
-    filename = filename + "_" + token_hash.digest().hex() + ".wplus_storage"
+    filename = filename + "_" + token_hash.digest().hex() + "."+hashlib.sha256(user_id.encode('UTF-8')).digest().hex()+".wplus_storage"
     savePathCheck(settings.STORAGE_DIR)
     file_path = Path(os.path.join(settings.STORAGE_DIR, filename))
     if file_path.is_file():
@@ -22,9 +22,9 @@ def get_saved_data(enc_key, filename, random_token):
     return None
 
 
-def save_data(content, enc_key, filename, random_token):
+def save_data(content, enc_key, filename, random_token, user_id):
     token_hash = hashlib.sha512(random_token.encode('UTF-8'))
-    filename = filename + "_" + token_hash.digest().hex() + ".wplus_storage"
+    filename = filename + "_" + token_hash.digest().hex() + "."+hashlib.sha256(user_id.encode('UTF-8')).digest().hex()+".wplus_storage"
     savePathCheck(settings.STORAGE_DIR)
     file_path = Path(os.path.join(settings.STORAGE_DIR, filename))
     if file_path.is_file():

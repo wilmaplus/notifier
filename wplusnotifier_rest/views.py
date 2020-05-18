@@ -39,7 +39,7 @@ def push(request):
             if settings.VALIDATE_CLIENT_KEY:
                 if not details.get('application', None) in settings.VALID_CLIENT_PACKAGES:
                     return generateErrorResponse(ErrorResult('iid_key is not trusted for this notifier!'))
-        runRoutines(server_url, session_cookies, iid_key, iid_key)
+        runRoutines(server_url, session_cookies, iid_key, session_check.get_combined_user_id())
         return generateResponse({})
 
 
