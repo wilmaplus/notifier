@@ -23,13 +23,13 @@ class RequestResult:
 class ErrorResult(RequestResult):
 
     def __init__(self, exception):
-        super(ErrorResult, self).__init__(True, exception)
+        super().__init__(True, exception)
 
 
 class LoginResult(RequestResult):
 
     def __init__(self, session):
-        super(LoginResult, self).__init__(False, None, None)
+        super().__init__(False, None, None)
         self.session = session
 
     def get_session(self):
@@ -39,13 +39,13 @@ class LoginResult(RequestResult):
 class SessionValidateResult(RequestResult):
 
     def __init__(self, validation, user_id, user_type):
-        super(SessionValidateResult, self).__init__(False, None, None)
+        super().__init__(False, None, None)
         self.validation = validation
         self.user_id = user_id
         self.user_type = user_type
 
     def get_combined_user_id(self):
-        return str(self.user_id)+"_"+str(self.user_type)
+        return str(self.user_id) + "_" + str(self.user_type)
 
     def is_valid_session(self):
         return self.validation
@@ -54,7 +54,7 @@ class SessionValidateResult(RequestResult):
 class PushSendRequest(RequestResult):
 
     def __init__(self, success):
-        super(PushSendRequest, self).__init__(False, None, None)
+        super().__init__(False, None, None)
         self.success = success
 
     def is_sent(self):
@@ -64,7 +64,7 @@ class PushSendRequest(RequestResult):
 class PushDetailsRequest(RequestResult):
 
     def __init__(self, details):
-        super(PushDetailsRequest, self).__init__(False, None, None)
+        super().__init__(False, None, None)
         self.details = details
 
     def get_details(self):
@@ -74,7 +74,7 @@ class PushDetailsRequest(RequestResult):
 class ExamsResult(RequestResult):
 
     def __init__(self, exams):
-        super(ExamsResult, self).__init__(False, None, None)
+        super().__init__(False, None, None)
         self.exams = exams
 
     def get_exams(self):
@@ -84,7 +84,7 @@ class ExamsResult(RequestResult):
 class ObservationsResult(RequestResult):
 
     def __init__(self, observations):
-        super(ObservationsResult, self).__init__(False, None, None)
+        super().__init__(False, None, None)
         self.observations = observations
 
     def get_observations(self):
@@ -94,7 +94,7 @@ class ObservationsResult(RequestResult):
 class NewsResult(RequestResult):
 
     def __init__(self, news):
-        super(NewsResult, self).__init__(False, None, None)
+        super().__init__(False, None, None)
         self.news = news
 
     def get_news(self):
