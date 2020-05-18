@@ -35,6 +35,12 @@ def checkApiKey(request):
     return RequestResult(False)
 
 
+@api_view(['GET'])
+@permission_classes([])
+def error_404(request):
+    return generateErrorResponse(ErrorResult("Resource not found"), 404)
+
+
 @api_view(['POST'])
 @permission_classes([])
 def push(request):
@@ -45,11 +51,11 @@ def push(request):
     server_url = request.data.get('server_url', None)
     iid_key = request.data.get('iid_key', None)
     if server_url is None:
-        return generateErrorResponse(ErrorResult('server_url is missing!'))
+        return generateErrorResponse(ErrorResult('server_url is missing!'), 400)
     if session_cookies is None:
-        return generateErrorResponse(ErrorResult('session is missing!'))
+        return generateErrorResponse(ErrorResult('session is missing!'), 400)
     if iid_key is None:
-        return generateErrorResponse(ErrorResult('iid_key is missing!'))
+        return generateErrorResponse(ErrorResult('iid_key is missing!'), 400)
     wilma_client = WilmaClient(server_url, session_cookies)
     session_check = wilma_client.checkSession()
     if session_check.is_error():
@@ -63,19 +69,19 @@ def push(request):
             details = iid_result.get_details()
             if settings.VALIDATE_CLIENT_KEY:
                 if not details.get('application', None) in settings.VALID_CLIENT_PACKAGES:
-                    return generateErrorResponse(ErrorResult('iid_key is not trusted for this notifier!'))
+                    return generateErrorResponse(ErrorResult('iid_key is not trusted for this notifier!'), 400)
         runRoutines(server_url, session_cookies, iid_key, session_check.get_combined_user_id())
         return generateResponse({})
 
 
-def generateErrorResponse(error_result):
-    return generateError(str(error_result.get_exception()))
+def generateErrorResponse(error_result, error_code=500):
+    return generateError(str(error_result.get_exception()), error_code)
 
 
-def generateError(cause):
+def generateError(cause, error_code=500):
     base = baseResponse()
     base.update({'cause': cause})
-    return Response(base)
+    return Response(base, error_code)
 
 
 def generateResponse(data):
@@ -88,3 +94,15 @@ def baseResponse(status=False):
     return {
         'status': status
     }
+
+@api_view(['GET'])
+@permission_classes([])
+def api_guide(request):
+    guide_content = {
+        "api_name": "wilmaplus-notifier_rest",
+        "documentation": settings.DOCUMENTATION_URL,
+        "apikey_required": settings.API_KEY_CHECK_ENABLED
+    }
+    return generateResponse({
+        "details": guide_content
+    })

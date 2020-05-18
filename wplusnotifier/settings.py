@@ -36,6 +36,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+DOCUMENTATION_URL = "https://github.com/developerfromjokela/wilmaplus-notifier/wiki"
 
 # Application definition
 
@@ -82,7 +83,10 @@ TEMPLATES = [
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
-    "EXCEPTION_HANDLER": "wplusnotifier_rest.views.custom_exception_handler"
+    "EXCEPTION_HANDLER": "wplusnotifier_rest.views.custom_exception_handler",
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    )
 }
 
 

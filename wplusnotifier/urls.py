@@ -8,9 +8,13 @@ The `urlpatterns` list routes URLs to views. For more information please see:
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf import settings
+from wplusnotifier_rest.views import error_404, api_guide
+
 
 patterns = [
-    url('api/v1/', include('wplusnotifier_rest.urls'))
+    url(r'^api/', include('wplusnotifier_rest.urls')),
+    url(r'^$', api_guide),
+    url(r'^', error_404),
 ]
 
 if settings.DJANGO_ADMIN_PANEL:
