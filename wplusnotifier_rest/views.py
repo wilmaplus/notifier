@@ -13,6 +13,11 @@ from wilma_connector.iid_client import IIDClient
 from wilma_connector.wilma_client import WilmaClient
 
 
+# Custom Error handler to make it fit with rest of the API
+def custom_exception_handler(exc, context):
+    return generateErrorResponse(ErrorResult(exc))
+
+
 @api_view(['POST'])
 @permission_classes([])
 def push(request):
