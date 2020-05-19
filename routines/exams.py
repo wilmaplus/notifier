@@ -21,12 +21,24 @@ class Exams(AbstractRoutine):
             offline_data = convertFromJSON(offline_data_pt)
             for l_exam in exams.get_exams():
                 found = False
+                gradeChange = False
                 for o_exam in offline_data:
                     if o_exam['ExamId'] == l_exam['ExamId']:
                         found = True
+                        o_grade = o_exam.get('Grade', None)
+                        l_grade = l_exam.get('Grade', None)
+                        if l_grade is not None and o_grade is not None:
+                            if l_grade != o_grade:
+                                gradeChange = True
+                        elif l_grade is not None:
+                            gradeChange = True
                         break
                 if not found:
                     push_content = {'type': 'notification', 'data': self.name, 'payload': l_exam}
+                    push_content.update(user_object)
+                    fcm_client.sendPush(push_id, push_content)
+                elif gradeChange:
+                    push_content = {'type': 'notification', 'data': self.name+"_grade", 'payload': l_exam}
                     push_content.update(user_object)
                     fcm_client.sendPush(push_id, push_content)
         self.save_file(convertToJSON(exams.get_exams()), push_id, push_id, user_id)

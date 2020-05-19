@@ -3,6 +3,7 @@
 from django.conf import settings
 import importlib
 
+
 def runRoutines(wilma_server, wilma_session, push_key, user_id):
     routines = settings.NOTIFIER_ROUTINES
     for routine in routines:

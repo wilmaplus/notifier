@@ -7,6 +7,7 @@ if ((3, 0) <= sys.version_info <= (3, 9)):
     from urllib.parse import urlparse
 elif ((2, 0) <= sys.version_info <= (2, 9)):
     from urlparse import urlparse
+
 from .classes import *
 from django.conf import settings
 
