@@ -2,6 +2,7 @@
 from wplusnotifier_storage.storage import *
 import json
 
+
 def convertFromJSON(content):
     return json.loads(content)
 
@@ -26,3 +27,6 @@ class AbstractRoutine:
 
     def save_file(self, content, enc_pass, push_id, user_id):
         return save_data(content, enc_pass, self.filename, push_id, user_id)
+
+    def delete_file(self, push_id, user_id):
+        return delete_saved_data(self.filename, push_id, user_id)

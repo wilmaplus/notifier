@@ -6,7 +6,6 @@ from .http_client import IIDHttpClient
 from .classes import *
 
 
-
 def checkForIIDError(response):
     if response.status_code != 200:
         jsonResponse = json.loads(response.text)
@@ -25,7 +24,7 @@ class IIDClient:
         self.http_client = IIDHttpClient()
 
     def push_key_details(self, push_key):
-        requestResult = self.http_client.get_request("iid/info/"+push_key)
+        requestResult = self.http_client.get_request("iid/info/" + push_key)
         if requestResult.is_error():
             return requestResult
         try:

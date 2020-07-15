@@ -14,7 +14,7 @@ class News(AbstractRoutine):
         fcm_client = FCMClient()
         news = wilma_client.getNews()
         if news.is_error():
-            return news.get_exception()
+            return news
         offline_data_pt = self.get_file(push_id, push_id, user_id)
         user_object = {'user_id': user_id.split("_")[0], 'user_type': user_id.split("_")[1], 'server': wilmaserver}
         if offline_data_pt is not None:

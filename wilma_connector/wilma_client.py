@@ -10,7 +10,7 @@ def checkForWilmaError(response):
         jsonResponse = json.loads(response.text)
         errorBody = jsonResponse.get('error', None)
         if errorBody is not None:
-            return ErrorResult(Exception(errorBody['message']))
+            return ErrorResult(Exception(errorBody['message']), errorBody)
         else:
             return ErrorResult(Exception("Unable to parse error code: " + str(response.status_code)))
     else:

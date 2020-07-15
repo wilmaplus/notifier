@@ -10,8 +10,12 @@ import os
 
 
 def get_saved_data(enc_key, filename, random_token, user_id):
-    token_hash = hashlib.sha512(random_token.encode('UTF-8'))
-    filename = filename + "_" + token_hash.digest().hex() + "."+hashlib.sha256(user_id.encode('UTF-8')).digest().hex()+".wplus_storage"
+    if (settings.SHORT_FILENAMES):
+        token_hash = hashlib.sha1(random_token.encode('UTF-8'))
+    else:
+        token_hash = hashlib.sha512(random_token.encode('UTF-8'))
+    filename = filename + "_" + token_hash.digest().hex() + "." + cust_sha256(
+        user_id.encode('UTF-8')).digest().hex() + ".wplus_storage"
     savePathCheck(settings.STORAGE_DIR)
     file_path = Path(os.path.join(settings.STORAGE_DIR, filename))
     if file_path.is_file():
@@ -22,9 +26,20 @@ def get_saved_data(enc_key, filename, random_token, user_id):
     return None
 
 
+def cust_sha256(content):
+    if (settings.SHORT_FILENAMES):
+        return hashlib.sha1(content)
+    else:
+        return hashlib.sha256()
+
+
 def save_data(content, enc_key, filename, random_token, user_id):
-    token_hash = hashlib.sha512(random_token.encode('UTF-8'))
-    filename = filename + "_" + token_hash.digest().hex() + "."+hashlib.sha256(user_id.encode('UTF-8')).digest().hex()+".wplus_storage"
+    if (settings.SHORT_FILENAMES):
+        token_hash = hashlib.sha1(random_token.encode('UTF-8'))
+    else:
+        token_hash = hashlib.sha512(random_token.encode('UTF-8'))
+    filename = filename + "_" + token_hash.digest().hex() + "." + cust_sha256(
+        user_id.encode('UTF-8')).digest().hex() + ".wplus_storage"
     savePathCheck(settings.STORAGE_DIR)
     file_path = Path(os.path.join(settings.STORAGE_DIR, filename))
     if file_path.is_file():
@@ -33,6 +48,19 @@ def save_data(content, enc_key, filename, random_token, user_id):
     f = open(file_path, "x")
     f.write(encrypted_content)
     f.close()
+
+
+def delete_saved_data(filename, random_token, user_id):
+    if (settings.SHORT_FILENAMES):
+        token_hash = hashlib.sha1(random_token.encode('UTF-8'))
+    else:
+        token_hash = hashlib.sha512(random_token.encode('UTF-8'))
+    filename = filename + "_" + token_hash.digest().hex() + "." + cust_sha256(
+        user_id.encode('UTF-8')).digest().hex() + ".wplus_storage"
+    savePathCheck(settings.STORAGE_DIR)
+    file_path = Path(os.path.join(settings.STORAGE_DIR, filename))
+    if file_path.is_file():
+        file_path.unlink()
 
 
 def savePathCheck(path):

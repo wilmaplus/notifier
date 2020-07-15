@@ -22,8 +22,12 @@ class RequestResult:
 
 class ErrorResult(RequestResult):
 
-    def __init__(self, exception):
+    def __init__(self, exception, wilma_error=None):
         super().__init__(True, exception)
+        self.wilma_error = wilma_error
+
+    def get_wilma_error(self):
+        return self.wilma_error
 
 
 class LoginResult(RequestResult):

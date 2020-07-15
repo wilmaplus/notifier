@@ -14,7 +14,7 @@ class Observations(AbstractRoutine):
         fcm_client = FCMClient()
         obs = wilma_client.getObservations()
         if obs.is_error():
-            return obs.get_exception()
+            return obs
         offline_data_pt = self.get_file(push_id, push_id, user_id)
         user_object = {'user_id': user_id.split("_")[0], 'user_type': user_id.split("_")[1], 'server': wilmaserver}
         if offline_data_pt is not None:
