@@ -7,3 +7,4 @@ Django-powered notifier backend listens when the app will request a notification
 Endpoints:
 
 *POST* `/api/v1/push` - Check for new items to push
+*POST* `/api/v1/delete` - Remove previously saved data from server
