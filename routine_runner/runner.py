@@ -8,10 +8,12 @@ def runRoutines(wilma_server, wilma_session, push_key, user_id, to_skip=[]):
     routines = settings.NOTIFIER_ROUTINES
     for routine in routines:
         routineID = routine['code']
+        routineClass = importlib.import_module(routine['package'])
+        class_ = getattr(routineClass, routine['class'])
         if routineID not in to_skip:
-            routineClass = importlib.import_module(routine['package'])
-            class_ = getattr(routineClass, routine['class'])
             class_().check(wilma_server, wilma_session, push_key, user_id)
+        else:
+            class_().delete_file(push_key, user_id)
 
 
 def deleteRoutineFiles(push_key, user_id):
