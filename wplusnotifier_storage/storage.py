@@ -30,7 +30,7 @@ def cust_sha256(content):
     if (settings.SHORT_FILENAMES):
         return hashlib.sha1(content)
     else:
-        return hashlib.sha256()
+        return hashlib.sha256(content)
 
 
 def save_data(content, enc_key, filename, random_token, user_id):

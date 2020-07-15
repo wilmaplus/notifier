@@ -4,7 +4,7 @@
 from django.conf.urls import url
 from rest_framework import routers
 
-from .views import push
+from .views import push, delete
 
 router = routers.DefaultRouter()
 
@@ -12,4 +12,5 @@ router = routers.DefaultRouter()
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     url(r'^v1/push', push),
+    url(r'^v1/delete', delete),
 ]
