@@ -87,9 +87,13 @@ class ExamsResult(RequestResult):
 
 class ObservationsResult(RequestResult):
 
-    def __init__(self, observations):
+    def __init__(self, observations, excuses_allowed):
         super().__init__(False, None, None)
         self.observations = observations
+        self.excusesAllowed = excuses_allowed
+
+    def isExcusesAllowed(self):
+        return self.excusesAllowed
 
     def get_observations(self):
         return self.observations

@@ -71,7 +71,8 @@ class WilmaClient:
             return error_check
         jsonResponse = json.loads(requestResult.get_response().text)
         obs = jsonResponse.get('Observations', [])
-        return ObservationsResult(obs)
+        savingExcuseAllowed = ('AllowSaveExcuse' in jsonResponse)
+        return ObservationsResult(obs, savingExcuseAllowed)
 
     def getNews(self, check_session=False):
         if check_session:

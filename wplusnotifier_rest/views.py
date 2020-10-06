@@ -51,7 +51,6 @@ def push(request):
     server_url = request.data.get('server_url', None)
     iid_key = request.data.get('iid_key', None)
     routinesToSkip = request.POST.getlist('skip_routine[]')
-    print(type(routinesToSkip))
     if not isinstance(routinesToSkip, list):
         routinesToSkip = [str(routinesToSkip)]
     if server_url is None:

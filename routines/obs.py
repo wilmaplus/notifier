@@ -26,6 +26,9 @@ class Observations(AbstractRoutine):
                         found = True
                         break
                 if not found:
+                    print("found")
+                    # Including this boolean for Wilma Plus to show "Clarify lesson note" button in the notification
+                    l_obs['allowSaveExcuse'] = obs.isExcusesAllowed()
                     push_content = {'type': 'notification', 'data': self.name, 'payload': l_obs}
                     push_content.update(user_object)
                     fcm_client.sendPush(push_id, push_content)
