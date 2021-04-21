@@ -28,7 +28,6 @@ class ReserveMessages(AbstractRoutine):
             for l_msg in messages.get_messages():
                 found = False
                 replyCountChanged = False
-
                 for o_msg in offline_data:
                     if o_msg['Id'] == l_msg['Id']:
                         found = True
@@ -40,5 +39,6 @@ class ReserveMessages(AbstractRoutine):
                     sendMsg(l_msg, user_object, push_id, fcm_client)
                 elif replyCountChanged:
                     sendMsg(l_msg, user_object, push_id, fcm_client)
+
         self.save_file(convertToJSON(messages.get_messages()), push_id, push_id, user_id)
         return None
