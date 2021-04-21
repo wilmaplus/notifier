@@ -3,7 +3,7 @@ import json
 
 from .http_client import WilmaHttpClient
 from .classes import *
-
+from urllib.parse import urlparse
 
 def checkForWilmaError(response):
     if response.status_code != 200:
@@ -34,9 +34,8 @@ class WilmaClient:
         jsonResponse = json.loads(requestResult.get_response().text)
         user_id = jsonResponse.get('PrimusId', -1)
         user_type = jsonResponse.get('Type', -1)
-        wilmaId = jsonResponse.get('WilmaId', None)
-        if user_id is not -1 and user_type is not -1 and wilmaId is not None:
-            return SessionValidateResult(True, user_id, user_type, wilmaId)
+        if user_id is not -1 and user_type is not -1:
+            return SessionValidateResult(True, user_id, user_type, urlparse(self.wilma_url).hostname)
         else:
             return ErrorResult('Unable to get user information. Are you sure that you included Slug ID?')
 
