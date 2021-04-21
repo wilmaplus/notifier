@@ -67,7 +67,8 @@ def push(request):
         iid_client = IIDClient()
         iid_result = iid_client.push_key_details(iid_key)
         if iid_result.is_error():
-            return generateErrorResponse(iid_result)
+            if settings.VALIDATE_CLIENT_KEY:
+                return generateErrorResponse(iid_result)
         else:
             details = iid_result.get_details()
             if settings.VALIDATE_CLIENT_KEY:
@@ -111,6 +112,7 @@ def delete(request):
 
 
 def generateErrorResponse(error_result, error_code=500):
+    print(error_result.get_exception())
     return generateError(str(error_result.get_exception()), error_code)
 
 

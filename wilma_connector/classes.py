@@ -84,6 +84,15 @@ class ExamsResult(RequestResult):
     def get_exams(self):
         return self.exams
 
+class MessagesResult(RequestResult):
+
+    def __init__(self, messages):
+        super().__init__(False, None, None)
+        self.messages = messages
+
+    def get_messages(self):
+        return self.messages
+
 
 class ObservationsResult(RequestResult):
 

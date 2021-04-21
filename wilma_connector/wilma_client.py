@@ -56,6 +56,23 @@ class WilmaClient:
         exams = jsonResponse.get('Exams', [])
         return ExamsResult(exams)
 
+    def getMessages(self, check_session=False):
+        if check_session:
+            session_result = self.checkSession()
+            if session_result.is_error():
+                return session_result
+            if not session_result.is_valid_session():
+                return ErrorResult(Exception('Invalid session!'))
+        requestResult = self.http_client.authenticated_get_request("messages/index_json/all")
+        if requestResult.is_error():
+            return requestResult
+        error_check = checkForWilmaError(requestResult.get_response())
+        if error_check is not None:
+            return error_check
+        jsonResponse = json.loads(requestResult.get_response().text)
+        exams = jsonResponse.get('Messages', [])
+        return MessagesResult(exams)
+
     def getObservations(self, check_session=False):
         if check_session:
             session_result = self.checkSession()
