@@ -16,7 +16,8 @@ SHORT_FILENAMES = False
 NOTIFIER_ROUTINES = [
     {'package': 'routines.exams', 'class': 'Exams', 'code': 'exams'},
     {'package': 'routines.obs', 'class': 'Observations', 'code': 'obs'},
-    {'package': 'routines.news', 'class': 'News', 'code': 'news'}
+    {'package': 'routines.news', 'class': 'News', 'code': 'news'},
+    {'package': 'routines.reservemessages', 'class': 'ReserveMessages', 'code': 'reservemessages'}
 ]
 
 # TODO set your FCM key(s)
