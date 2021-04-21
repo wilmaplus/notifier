@@ -64,7 +64,7 @@ class WilmaClient:
                 return session_result
             if not session_result.is_valid_session():
                 return ErrorResult(Exception('Invalid session!'))
-        requestResult = self.http_client.authenticated_get_request("messages/index_json/all")
+        requestResult = self.http_client.authenticated_get_request("messages/index_json")
         if requestResult.is_error():
             return requestResult
         error_check = checkForWilmaError(requestResult.get_response())

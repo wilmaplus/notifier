@@ -10,6 +10,20 @@ def sendMsg(message, user_object, push_id, fcm_client):
     push_content.update(user_object)
     fcm_client.sendPush(push_id, push_content)
 
+def optimizeMessage(msg):
+    template = {
+        "Id": "",
+        "Replies": 0,
+        "Status": 0
+    }
+    if "Id" in msg:
+        template["Id"] = msg["Id"]
+    if "Replies" in msg:
+        template["Replies"] = msg["Replies"]
+    if "Status" in msg:
+        template["Status"] = msg["Status"]
+    return template
+
 
 class ReserveMessages(AbstractRoutine):
     def __init__(self):
@@ -21,11 +35,14 @@ class ReserveMessages(AbstractRoutine):
         messages = wilma_client.getMessages()
         if messages.is_error():
             return messages
+        optimizedMessages = []
+        for msg in messages.get_messages():
+            optimizedMessages.append(optimizeMessage(msg))
         offline_data_pt = self.get_file(push_id, push_id, user_id)
         user_object = {'user_id': user_id.split("_")[0], 'user_type': user_id.split("_")[1], 'server': wilmaserver}
         if offline_data_pt is not None:
             offline_data = convertFromJSON(offline_data_pt)
-            for l_msg in messages.get_messages():
+            for l_msg in optimizedMessages:
                 found = False
                 replyCountChanged = False
                 for o_msg in offline_data:
@@ -40,5 +57,5 @@ class ReserveMessages(AbstractRoutine):
                 elif replyCountChanged:
                     sendMsg(l_msg, user_object, push_id, fcm_client)
 
-        self.save_file(convertToJSON(messages.get_messages()), push_id, push_id, user_id)
+        self.save_file(convertToJSON(optimizedMessages), push_id, push_id, user_id)
         return None
