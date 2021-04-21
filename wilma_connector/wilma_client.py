@@ -34,8 +34,9 @@ class WilmaClient:
         jsonResponse = json.loads(requestResult.get_response().text)
         user_id = jsonResponse.get('PrimusId', -1)
         user_type = jsonResponse.get('Type', -1)
-        if user_id is not -1 and user_type is not -1:
-            return SessionValidateResult(True, user_id, user_type)
+        wilmaId = jsonResponse.get('WilmaId', None)
+        if user_id is not -1 and user_type is not -1 and wilmaId is not None:
+            return SessionValidateResult(True, user_id, user_type, wilmaId)
         else:
             return ErrorResult('Unable to get user information. Are you sure that you included Slug ID?')
 

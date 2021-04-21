@@ -42,14 +42,15 @@ class LoginResult(RequestResult):
 
 class SessionValidateResult(RequestResult):
 
-    def __init__(self, validation, user_id, user_type):
+    def __init__(self, validation, user_id, user_type, wilma_id):
         super().__init__(False, None, None)
         self.validation = validation
         self.user_id = user_id
         self.user_type = user_type
+        self.wilma_id = wilma_id
 
     def get_combined_user_id(self):
-        return str(self.user_id) + "_" + str(self.user_type)
+        return str(self.user_id) + "_" + str(self.user_type) + "_"+ self.wilma_id
 
     def is_valid_session(self):
         return self.validation
