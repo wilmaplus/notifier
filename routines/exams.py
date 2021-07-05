@@ -1,6 +1,6 @@
 #  Copyright (c) 2020 wilmaplus-notifier, developed by Developer From Jokela, for Wilma Plus mobile app
 
-from .abstract import AbstractRoutine, convertToJSON, convertFromJSON
+from .abstract import AbstractRoutine, convertToJSON, convertFromJSON, filterItemsByDate
 from wilma_connector.wilma_client import WilmaClient
 from wilma_connector.fcm_client import FCMClient
 
@@ -15,11 +15,15 @@ class Exams(AbstractRoutine):
         exams = wilma_client.getExams()
         if exams.is_error():
             return exams
+
+        # Filter exams to exclude false-positive notifications
+        filteredExams = filterItemsByDate(exams.get_exams(), "Date")
+
         offline_data_pt = self.get_file(push_id, push_id, user_id)
         user_object = {'user_id': user_id.split("_")[0], 'user_type': user_id.split("_")[1], 'server': wilmaserver}
         if offline_data_pt is not None:
-            offline_data = convertFromJSON(offline_data_pt)
-            for l_exam in exams.get_exams():
+            offline_data = filterItemsByDate(convertFromJSON(offline_data_pt), "Date")
+            for l_exam in filteredExams:
                 found = False
                 gradeChange = False
                 for o_exam in offline_data:
@@ -41,5 +45,5 @@ class Exams(AbstractRoutine):
                     push_content = {'type': 'notification', 'data': self.name+"_grade", 'payload': l_exam}
                     push_content.update(user_object)
                     fcm_client.sendPush(push_id, push_content)
-        self.save_file(convertToJSON(exams.get_exams()), push_id, push_id, user_id)
+        self.save_file(convertToJSON(filteredExams), push_id, push_id, user_id)
         return None

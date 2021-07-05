@@ -6,6 +6,10 @@ API_KEY_CHECK_ENABLED = False
 API_KEYS = []
 DJANGO_ADMIN_PANEL = False
 
+# Ignore all items older than x days, to avoid false-positive notifications,
+# because of issue https://github.com/wilmaplus/notifier/issues/3
+MAX_TIMESTAMP = 7
+
 VALIDATE_CLIENT_KEY = False
 VALID_CLIENT_PACKAGE = "com.example.app"
 

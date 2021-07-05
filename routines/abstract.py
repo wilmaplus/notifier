@@ -1,6 +1,19 @@
 #  Copyright (c) 2020 wilmaplus-notifier, developed by Developer From Jokela, for Wilma Plus mobile app
 from wplusnotifier_storage.storage import *
 import json
+from datetime import datetime
+from django.conf import settings
+
+
+def filterFunc(item, date_key, date_format):
+    dateString = item[date_key]
+    date_time_obj = datetime.strptime(dateString, date_format)
+    comparison = datetime.now() - date_time_obj
+    return comparison.days < settings.MAX_TIMESTAMP
+
+
+def filterItemsByDate(array, date_key, date_format="%Y-%m-%d"):
+    return list(filter(lambda item: filterFunc(item, date_key, date_format), array))
 
 
 def convertFromJSON(content):
