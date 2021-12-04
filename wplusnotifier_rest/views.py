@@ -112,7 +112,6 @@ def delete(request):
 
 
 def generateErrorResponse(error_result, error_code=500):
-    print(error_result.get_exception())
     return generateError(str(error_result.get_exception()), error_code)
 
 

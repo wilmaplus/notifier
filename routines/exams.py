@@ -1,7 +1,7 @@
 #  Copyright (c) 2020 wilmaplus-notifier, developed by Developer From Jokela, for Wilma Plus mobile app
 
 from .abstract import AbstractRoutine, convertToJSON, convertFromJSON, filterItemsByDate
-from wilma_connector.wilma_client import WilmaClient
+from wilma_connector.wilma_client import WilmaClient, ErrorResult
 from wilma_connector.fcm_client import FCMClient
 
 
@@ -17,15 +17,15 @@ class Exams(AbstractRoutine):
             return exams
 
         # Filter exams to exclude false-positive notifications
-        filteredExams = filterItemsByDate(exams.get_exams(), "Date")
+        filtered_exams = filterItemsByDate(exams.get_exams(), "Date")
 
         offline_data_pt = self.get_file(push_id, push_id, user_id)
         user_object = {'user_id': user_id.split("_")[0], 'user_type': user_id.split("_")[1], 'server': wilmaserver}
         if offline_data_pt is not None:
             offline_data = filterItemsByDate(convertFromJSON(offline_data_pt), "Date")
-            for l_exam in filteredExams:
+            for l_exam in filtered_exams:
                 found = False
-                gradeChange = False
+                grade_change = False
                 for o_exam in offline_data:
                     if o_exam['ExamId'] == l_exam['ExamId']:
                         found = True
@@ -33,17 +33,17 @@ class Exams(AbstractRoutine):
                         l_grade = l_exam.get('Grade', None)
                         if l_grade is not None and o_grade is not None:
                             if l_grade != o_grade:
-                                gradeChange = True
+                                grade_change = True
                         elif l_grade is not None:
-                            gradeChange = True
+                            grade_change = True
                         break
                 if not found:
                     push_content = {'type': 'notification', 'data': self.name, 'payload': l_exam}
                     push_content.update(user_object)
                     fcm_client.sendPush(push_id, push_content)
-                elif gradeChange:
+                elif grade_change:
                     push_content = {'type': 'notification', 'data': self.name+"_grade", 'payload': l_exam}
                     push_content.update(user_object)
                     fcm_client.sendPush(push_id, push_content)
-        self.save_file(convertToJSON(filteredExams), push_id, push_id, user_id)
+        self.save_file(convertToJSON(filtered_exams), push_id, push_id, user_id)
         return None

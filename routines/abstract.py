@@ -5,15 +5,22 @@ from datetime import datetime
 from django.conf import settings
 
 
-def filterFunc(item, date_key, date_format):
+def filterFunc(item, date_key, date_format, backup_format=None):
     dateString = item[date_key]
-    date_time_obj = datetime.strptime(dateString, date_format)
+    try:
+        date_time_obj = datetime.strptime(dateString, date_format)
+    except Exception as e:
+        # If timestamp contains time data, use backup format
+        if "unconverted data" in str(e) and backup_format is not None:
+            date_time_obj = datetime.strptime(dateString, backup_format)
+        else:
+            raise e
     comparison = datetime.now() - date_time_obj
     return comparison.days < settings.MAX_TIMESTAMP
 
 
-def filterItemsByDate(array, date_key, date_format="%Y-%m-%d"):
-    return list(filter(lambda item: filterFunc(item, date_key, date_format), array))
+def filterItemsByDate(array, date_key, date_format="%Y-%m-%d", backup_format="%Y-%m-%d %H:%M"):
+    return list(filter(lambda item: filterFunc(item, date_key, date_format, backup_format), array))
 
 
 def convertFromJSON(content):
