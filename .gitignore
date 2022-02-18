@@ -3,3 +3,5 @@ wplusnotifier/notifier.py
 .idea
 db.sqlite3
 wplusnotifier_data
+*.p8
+migrations

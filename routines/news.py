@@ -12,7 +12,7 @@ class News(AbstractRoutine):
     def check(self, wilmaserver, wilmasession, push_id, user_id):
         wilma_client = WilmaClient(wilmaserver, wilmasession)
         fcm_client = FCMClient()
-        news = wilma_client.getNews()
+        news = wilma_client.get_news()
         if news.is_error():
             return news
         offline_data_pt = self.get_file(push_id, push_id, user_id)

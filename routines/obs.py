@@ -13,7 +13,7 @@ class Observations(AbstractRoutine):
     def check(self, wilmaserver, wilmasession, push_id, user_id):
         wilma_client = WilmaClient(wilmaserver, wilmasession)
         fcm_client = FCMClient()
-        obs = wilma_client.getObservations()
+        obs = wilma_client.get_observations()
         if obs.is_error():
             return obs
 

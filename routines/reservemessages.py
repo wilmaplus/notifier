@@ -8,7 +8,7 @@ from wilma_connector.fcm_client import FCMClient
 def sendMsg(message, user_object, push_id, fcm_client):
     push_content = {'type': 'notification', 'data': "reserve_message", 'payload': message}
     push_content.update(user_object)
-    fcm_client.sendPush(push_id, push_content)
+    fcm_client.send_push(push_id, push_content)
 
 def optimizeMessage(msg):
     template = {
@@ -32,7 +32,7 @@ class ReserveMessages(AbstractRoutine):
     def check(self, wilmaserver, wilmasession, push_id, user_id):
         wilma_client = WilmaClient(wilmaserver, wilmasession)
         fcm_client = FCMClient()
-        messages = wilma_client.getMessages()
+        messages = wilma_client.get_messages()
         if messages.is_error():
             return messages
         optimizedMessages = []

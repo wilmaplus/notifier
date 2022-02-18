@@ -42,18 +42,38 @@ class LoginResult(RequestResult):
 
 class SessionValidateResult(RequestResult):
 
-    def __init__(self, validation, user_id, user_type, wilma_id):
+    def __init__(self, validation, user_id, user_type, wilma_id, form_key):
         super().__init__(False, None, None)
         self.validation = validation
         self.user_id = user_id
         self.user_type = user_type
         self.wilma_id = wilma_id
+        self.form_key = form_key
 
     def get_combined_user_id(self):
         return str(self.user_id) + "_" + str(self.user_type)+"_"+self.wilma_id
 
     def is_valid_session(self):
         return self.validation
+
+
+class GlobalValidateResult(RequestResult):
+
+    def __init__(self, validation, user_id, user_type, wilma_id, form_key, roles):
+        super().__init__(False, None, None)
+        self.validation = validation
+        self.user_id = user_id
+        self.user_type = user_type
+        self.wilma_id = wilma_id
+        self.form_key = form_key
+        self.roles = roles
+
+    def get_combined_user_id(self):
+        return str(self.user_id) + "_" + str(self.user_type)+"_"+self.wilma_id
+
+    def is_valid_session(self):
+        return self.validation
+
 
 
 class PushSendRequest(RequestResult):

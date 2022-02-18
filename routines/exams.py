@@ -12,7 +12,7 @@ class Exams(AbstractRoutine):
     def check(self, wilmaserver, wilmasession, push_id, user_id):
         wilma_client = WilmaClient(wilmaserver, wilmasession)
         fcm_client = FCMClient()
-        exams = wilma_client.getExams()
+        exams = wilma_client.get_exams()
         if exams.is_error():
             return exams
 

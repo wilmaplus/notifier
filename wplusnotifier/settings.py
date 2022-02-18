@@ -29,7 +29,7 @@ STORAGE_DIR = os.path.join(BASE_DIR, 'wplusnotifier_data')
 
 # CHANGE THIS AFTER YOU'VE DONE THE SETUP!
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '-_5u0w0j_0_%lgq=46vun^l)_+)y11*9@0ls5l#n7^4vh3nc&&'
+SECRET_KEY = 'kl&r0jt0gaz#6izg8npky47*pg)5&i7m+=l3@tv@01dh7_lyr%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'wplusnotifier_rest'
+    'wplusnotifier_rest',
+    'fcmproxy'
 ]
 
 MIDDLEWARE = [
@@ -123,9 +124,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'fi-fi'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Helsinki'
 
 USE_I18N = True
 

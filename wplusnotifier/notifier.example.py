@@ -29,3 +29,16 @@ FCM_SERVER_KEY = ""
 IID_SERVER_KEY = ""
 FCM_URL = "https://fcm.googleapis.com"
 IID_URL = "https://iid.googleapis.com"
+
+# FCMProxy Configuration
+# FCMProxy forwards Firebase cloud messages from Wilma server to ie. Apple PNS or other methods.
+
+ENABLE_FCM_PROXY = False
+SENDER_ID = ""
+
+# TODO Configure Apple Push Notification Service
+APNS_DEV = False
+APNS_PRIVATE_KEY_FILENAME = ""
+APNS_KEY_ID = ""
+APPLEDEV_TEAM_ID = ""
+APNS_TOPIC = ""

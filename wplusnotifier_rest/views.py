@@ -15,6 +15,8 @@ from wilma_connector.wilma_client import WilmaClient
 
 # Custom Error handler to make it fit with rest of the API
 def custom_exception_handler(exc, context):
+    if settings.DEBUG:
+        print(exc)
     return generateErrorResponse(ErrorResult(exc))
 
 
@@ -60,7 +62,7 @@ def push(request):
     if iid_key is None:
         return generateErrorResponse(ErrorResult('iid_key is missing!'), 400)
     wilma_client = WilmaClient(server_url, session_cookies)
-    session_check = wilma_client.checkSession()
+    session_check = wilma_client.check_session()
     if session_check.is_error():
         return generateWilmaErrorResponse(session_check, session_check.get_wilma_error())
     else:
@@ -94,7 +96,7 @@ def delete(request):
     if iid_key is None:
         return generateErrorResponse(ErrorResult('iid_key is missing!'), 400)
     wilma_client = WilmaClient(server_url, session_cookies)
-    session_check = wilma_client.checkSession()
+    session_check = wilma_client.check_session()
     if session_check.is_error():
         return generateWilmaErrorResponse(session_check, session_check.get_wilma_error())
     else:
@@ -112,6 +114,8 @@ def delete(request):
 
 
 def generateErrorResponse(error_result, error_code=500):
+    if settings.DEBUG:
+        print(error_result.get_exception())
     return generateError(str(error_result.get_exception()), error_code)
 
 
@@ -123,6 +127,8 @@ def generateWilmaErrorResponse(error_result, wilma_response, error_code=500):
 
 
 def generateError(cause, error_code=500):
+    if settings.DEBUG:
+        print(cause)
     base = baseResponse()
     base.update({'cause': cause})
     return Response(base, error_code)
