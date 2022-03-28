@@ -11,11 +11,16 @@ from routine_runner.runner import *
 from wilma_connector.classes import ErrorResult, RequestResult
 from wilma_connector.iid_client import IIDClient
 from wilma_connector.wilma_client import WilmaClient
+import logging
 
+
+logging.basicConfig(level=logging.DEBUG if settings.DEBUG else logging.WARNING)
+logger = logging.getLogger(__name__)
 
 # Custom Error handler to make it fit with rest of the API
 def custom_exception_handler(exc, context):
     if settings.DEBUG:
+        logger.exception(exc)
         print(exc)
     return generateErrorResponse(ErrorResult(exc))
 

@@ -36,7 +36,7 @@ class WilmaClient:
         user_type = json_response.get('Type', -1)
         wilma_id = json_response.get('WilmaId', None)
         form_key = json_response.get('FormKey', None)
-        if user_id is not -1 and user_type is not -1 and wilma_id is not None:
+        if user_id != -1 and user_type != -1 and wilma_id != None:
             return SessionValidateResult(True, user_id, user_type, wilma_id, form_key)
         else:
             return ErrorResult('Unable to get user information. Are you sure that you included Slug ID?')
@@ -53,7 +53,7 @@ class WilmaClient:
         user_type = json_response.get('Type', -1)
         wilma_id = json_response.get('WilmaId', None)
         form_key = json_response.get('FormKey', None)
-        if user_id is not -1 and user_type is not -1 and wilma_id is not None:
+        if user_id != -1 and user_type != -1 and wilma_id != None:
             return GlobalValidateResult(True, user_id, user_type, wilma_id, form_key, [])
         else:
             roles = json_response.get('Roles', [])
