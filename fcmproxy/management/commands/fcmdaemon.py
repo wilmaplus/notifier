@@ -1,16 +1,23 @@
 #  Copyright (c) 2022 wilmaplus-notifier, developed by Developer From Jokela, for Wilma Plus mobile app
-
-from django.conf import settings
+import asyncio
 import json
-from pathlib import Path
-import os
-from push_receiver import register, listen
-from fcmproxy.models import PersistentId, ForwardingSubscriber, SubscriberDevice
-from django.core.management.base import BaseCommand
-from fcmproxy.utils import forward_to_device
-from wplusnotifier_storage.storage import savePathCheck
+import logging
 from multiprocessing import Process
 
+import websockets
+from django.conf import settings
+from django.core.management.base import BaseCommand
+
+from fcmproxy.models import PersistentId, ForwardingSubscriber, SubscriberDevice
+from fcmproxy.utils import forward_to_device
+from asgiref.sync import sync_to_async
+
+
+def get_persistent_ids():
+    return list(PersistentId.objects.values_list('persistent_id'))
+
+logging.basicConfig(level=logging.DEBUG if settings.DEBUG else logging.WARNING)
+logger = logging.getLogger(__name__)
 
 class Command(BaseCommand):
 
@@ -24,8 +31,7 @@ class Command(BaseCommand):
             # forward_to_device(data, device)
 
     @staticmethod
-    def on_notification(obj, notification, data_message):
-        persistent_id = data_message.persistent_id
+    def on_notification(notification, persistent_id):
         if settings.DEBUG:
             print(persistent_id)
         if PersistentId.objects.filter(persistent_id=persistent_id).exists():
@@ -45,27 +51,37 @@ class Command(BaseCommand):
                 subscriber = subscriber_filter.first()
                 Command.relay_notification(notification['data'], subscriber)
 
-    def handle(self, *args, **options):
-        sender_id = settings.SENDER_ID
-        file_path = Path(os.path.join(settings.STORAGE_DIR, 'fcm_cred.json'))
+    async def process_incoming_message(self, message, websocket):
         try:
-            # already registered, load previous credentials
-            with open(file_path, "r") as f:
-                credentials = json.load(f)
+            json_data = json.loads(message)
+            if "request" in json_data:
+                request = json_data["request"]
+                if request == "get-persistent-ids":
+                    db_persistent_ids = await sync_to_async(get_persistent_ids, thread_sensitive=True)()
+                    persistent_ids = []
+                    for persistent_id in db_persistent_ids:
+                        persistent_ids.append("".join(persistent_id))
+                    if settings.DEBUG:
+                        print("Persistent IDs from DB: {}".format(len(persistent_ids)))
+                    await websocket.send(json.dumps({"success": True, "request": request, "response": persistent_ids}))
+            elif "notification" in json_data:
+                notification = json_data["notification"]
+                persistent_id = json_data["persistentId"]
+                await sync_to_async(self.on_notification, thread_sensitive=True)(notification, persistent_id)
+            elif "credentials" in json_data:
+                creds = json_data["credentials"]
+                print("New FCM Key: {}".format(creds["fcm"]["token"]))
 
-        except FileNotFoundError:
-            # first time, register and store credentials
-            credentials = register(sender_id=sender_id)
-            savePathCheck(settings.STORAGE_DIR)
-            with open(file_path, "w") as f:
-                json.dump(credentials, f)
+        except Exception as e:
+            print("Parsing failed", e)
+            print(e)
+            logger.error(e)
+            await websocket.send(json.dumps({"success": False, "request": "unknown", "response": e.__str__()}))
 
-        print("FCM Key: {}".format(credentials["fcm"]["token"]))
+    async def web_socket_listener(self, uri):
+        async with websockets.connect(uri) as websocket:
+            async for message in websocket:
+                await self.process_incoming_message(message, websocket)
 
-        db_persistent_ids = PersistentId.objects.values_list('persistent_id')
-        persistent_ids = []
-        for persistent_id in db_persistent_ids:
-            persistent_ids.append("".join(persistent_id))
-        if settings.DEBUG:
-            print("Persistent IDs from DB: {}".format(len(persistent_ids)))
-        listen(credentials, self.on_notification, persistent_ids)
+    def handle(self, *args, **options):
+        asyncio.run(self.web_socket_listener(settings.FCMPROXY_HOST))

@@ -35,6 +35,7 @@ IID_URL = "https://iid.googleapis.com"
 
 ENABLE_FCM_PROXY = False
 SENDER_ID = ""
+FCMPROXY_HOST = "ws://localhost:8082"
 
 # TODO Configure Apple Push Notification Service
 APNS_DEV = False

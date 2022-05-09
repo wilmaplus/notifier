@@ -12,7 +12,6 @@ idna==3.3
 Naked==0.1.31
 oscrypto==1.2.1
 protobuf==3.19.4
-push-receiver @ git+https://github.com/vivedp/push_receiver.git@9ad4a58b389cf8e6499eec59c061be755d29369f
 pycparser==2.21
 pycryptodome==3.4.3
 pytz==2021.3
@@ -24,3 +23,4 @@ urllib3==1.26.8
 
 aioapns~=2.1
 PyJWT~=2.3.0
+websockets~=10.3
