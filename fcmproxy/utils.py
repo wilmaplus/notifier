@@ -1,4 +1,5 @@
 #  Copyright (c) 2022 wilmaplus-notifier, developed by Developer From Jokela, for Wilma Plus mobile app
+import asyncio
 from enum import Enum
 
 from aioapns import PushType
@@ -16,6 +17,8 @@ class DeviceType(Enum):
 
 
 def forward_to_device(data, device):
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
     if device['type'] == 1:
         # APNS
         apns_client = APNSClient()
