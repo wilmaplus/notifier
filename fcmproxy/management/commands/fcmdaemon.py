@@ -34,13 +34,12 @@ class Command(BaseCommand):
     def on_notification(notification, persistent_id):
         if settings.DEBUG:
             print(persistent_id)
-        if PersistentId.objects.filter(persistent_id=persistent_id).exists():
-            return
 
-        # store in persistent ID storage
-        persistent_id_db = PersistentId.objects.create()
-        persistent_id_db.persistent_id = persistent_id
-        persistent_id_db.save()
+        try:
+            if PersistentId.objects.filter(persistent_id=persistent_id).exists():
+                return
+        except Exception as e:
+            print(e)
 
         if notification is not None and notification['data'] is not None:
             # Process notification, get all subscriber devices and forward
@@ -50,6 +49,13 @@ class Command(BaseCommand):
             if subscriber_filter.exists():
                 subscriber = subscriber_filter.first()
                 Command.relay_notification(notification['data'], subscriber)
+
+        # store in persistent ID storage
+        persistent_id_db = PersistentId.objects.create()
+        persistent_id_db.persistent_id = persistent_id
+        persistent_id_db.save()
+
+
 
     async def process_incoming_message(self, message, websocket):
         try:
