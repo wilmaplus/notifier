@@ -38,6 +38,8 @@ services:
   fcmproxy:
     image: ghcr.io/wilmaplus/fcmproxy
     restart: unless-stopped
+    environment:
+      SENDER_ID: ${SENDER_ID}
   db:
     image: mariadb
     environment:
