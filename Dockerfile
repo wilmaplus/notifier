@@ -34,5 +34,3 @@ RUN /usr/bin/crontab /app/crontab
 EXPOSE 80
 
 CMD ["bash", "/app/docker/start.sh"]
-
-

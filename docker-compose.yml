@@ -23,6 +23,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      fcmproxy:
+        condition: service_healthy
     ports:
       - "${BACKEND_PORT}:80"
   phpmyadmin:
@@ -32,6 +34,9 @@ services:
         condition: service_healthy
     ports:
       - "${PMA_PORT}:80"
+    restart: unless-stopped
+  fcmproxy:
+    image: ghcr.io/wilmaplus/fcmproxy
     restart: unless-stopped
   db:
     image: mariadb
