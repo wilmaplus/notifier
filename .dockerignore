@@ -6,4 +6,5 @@ wplusnotifier_data
 *.p8
 migrations
 .env
+__pycache__
 static
