@@ -18,6 +18,7 @@ services:
     restart: always
     volumes:
       - static_data:/app/static/
+      - ./wplusnotifier/:/app/wplusnotifier/
       - ${DATA_VOL}:/app/attachments/
     depends_on:
       db:
